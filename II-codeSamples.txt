@@ -1,0 +1,25 @@
+II-55				II-55_SystemDisplay
+II-78 - II-81		II-78_BDOS_ERROR_RECOVERY
+II-93 - II-94		II-93_BIOSHookSampleProgram
+II-96				II-96_BIOSCallSampleProgram
+II-116				II-116_BIOSPsetSampleProgram
+II-122 - II-123		II-122_BIOSBeepSampleProgram
+II-129 - II-131		II-129-BIOSTimdatSampleProgram
+II-145 - II-149		II-145_BIOSCallSampleProgram
+II-153				II-153_BIOSMask1SampleProgram
+II-155 - II-160		II-155_LoadxSampleProgram
+II-164 - II-165		II-164_BIOSGetpfkSampleProgram
+II-169 - II-171		II-169_ReadDIPSwitch_PowerSwitch
+II-177 - II-178		II-177_SetAutoStartString
+II-224 - II-226		II-224_DisplayKeyStatus
+II-227				II-227_KeyInByUsingHalt
+II-275 - II-277		II-275_ChangeScreenAreaProgram
+II-278 - II-281		II-278_ConsoleDirectDisplaySample
+II-340 - II-343		II-340_ChangeDiskTranslateTable
+II-374 - II-377		
+II-409 - II-413		
+II-422 - II-427		
+II-443 - II-448		
+II-484 - II-487		
+II-549 - II-553		
+II-580 - II-581		II-581_1MbitROMReadProgram
