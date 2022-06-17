@@ -16,10 +16,10 @@ II-227				II-227_KeyInByUsingHalt
 II-275 - II-277		II-275_ChangeScreenAreaProgram
 II-278 - II-281		II-278_ConsoleDirectDisplaySample
 II-340 - II-343		II-340_ChangeDiskTranslateTable
-II-374 - II-377		
-II-409 - II-413		
-II-422 - II-427		
-II-443 - II-448		
+II-374 - II-377		II-374_ChangeRAMDisk_UserBIOSSizeProgram
+II-409 - II-413		II-409_FDDUtility
+II-422 - II-427		(MCT)
+II-443 - II-448		II-443_HookSampleProgram
 II-484 - II-487		
 II-549 - II-553		
 II-580 - II-581		II-581_1MbitROMReadProgram
