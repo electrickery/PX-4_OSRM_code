@@ -54,6 +54,9 @@ def getRomHeaderAddr(fileName, fileSize):
         print('Unknown ROM size: ' + str(fileSize) + ', must be 8192, 16384 or 32768')
     return -1
     
+print('romInfo.py alpha 0.2  ** beware: cluster count or cluster mapping incorrect! **')
+print()
+
 fileName = ''
 #fileName = '../CampbellROMs/ASM-DBG80.COM.BIN'
 #fileName = '../CampbellROMs/PC_4.0_SPC_analyzer_ROM.BIN'
@@ -131,6 +134,12 @@ if (dirEntCount == 0x04 or dirEntCount == 0x08 or dirEntCount == 0x0C or dirEntC
 else:
     print('21th byte is directory entry count error: ' + str(dirEntCount) + ', not ok.')
 
+clusterSize = 1024
+totalSize = (sizeByte & 0x7F) * clusterSize
+header_dirSize =  dirEntCount * int(clusterSize/4)
+capacity =  totalSize - header_dirSize
+print(' ROM capacity: (' + str(totalSize) + ' - ' + str(header_dirSize) + '): ' + str(capacity) + ', ' + str(int(capacity / clusterSize)) + '/' + hex(int(capacity / clusterSize)) + ' clusters.')
+
 vChar = rawHeader[0x17]
 if (chr(vChar) == 'V'):
     print(' 22th byte is a \'V\', Ok.')
@@ -159,8 +168,16 @@ def dirEntry(entry):
             arcBit = 'A'
         else:
             arcBit = '-'
+        bits = roBit + sysBit + arcBit
         extend = str(int(entry[0x0C]))
-        return(str(entry[0]) + ':' + str(stripBit8(entry[1:12])) + ' ' + roBit + sysBit + arcBit + ' ' + extend)
+        clustersUsed = '  '
+        for cluster in range(0x10,0x20):
+            if (entry[cluster] != 0):
+                clustersUsed = clustersUsed + hex(cluster) + '/' + str(hex(entry[cluster])) + ' '
+                
+        retStr = str(entry[0]) + ':' + str(stripBit8(entry[1:12]))+ ' ' + extend + ' ' + bits + ' ' + str(clustersUsed)
+        return(retStr)
+        # 
 
 def stripBit8(byteStr):
     newByteStr = ''
@@ -171,6 +188,7 @@ def stripBit8(byteStr):
 dirBlocks = int(dirEntCount / 4)
 
 print()
+print('  name    ext e RSA   clusters used')
 
 for block in range(dirBlocks):
     print('  Directory block: ' + str(block))
