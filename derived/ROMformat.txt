@@ -1,0 +1,29 @@
+Header
+
+Header location in ROM/CPU address space
+           M-type        P-type
+8 kByte    0000h/C000h   0000h/C000h
+16 kByte   0000h/C000h   2000h/A000h
+32 kByte   4000h/C000h   6000h/6000h
+
+When the header isn't at 0000h, data starts (cluster 1) starts after the directory end wraps around to 0000h up to 3FFFh. 
+
+00h      E5h
+01h      format: 37h - M Format, 50h - P Format
+02h      capacity: 08h - single ROM, 8 kByte
+                 88h - double ROM, 8 kByte 
+                 10h - single ROM, 16 kByte
+                 90h - double ROM, 1st part 16 kByte
+                 20h - single ROM, 32 kByte
+                 A0h - double ROM, 1st part 32 kByte
+03h-04h  checksum: LSB first. Sum of all bytes of data. Excludes header. Not checked.
+05h-07h  sysname:  user-supplied system name. Not used.
+08h-15h  ROMname:  user-supplied rom name. Not used.
+16h      dircount: directory entry count, rounded up to a multiple of 4.
+                 values: 04h, 08h, 0Ch, 10h, 14h, 18h, 1Ch, 20h
+17h     'V'
+18h-19h  version:  user-supplied version. Not used.
+1Ah-1Fh  ROMdate:  user-supplied ROM date, format MMDDYY.  
+
+The header occupies the first 32 byte slot of the directory area. The directory entries are 32 byte, so the smallest directory area can contain three entries. The largest directory area can contain 31 directory entries. Each entry can address 16 clusters of 1 kByte of ROM space, so larger files use multiple (2 max.) entries.
+
