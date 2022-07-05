@@ -54,7 +54,7 @@ def getRomHeaderAddr(fileName, fileSize):
         print('Unknown ROM size: ' + str(fileSize) + ', must be 8192, 16384 or 32768')
     return -1
     
-print('romInfo.py alpha 0.2  ** beware: cluster count or cluster mapping incorrect! **')
+print('romInfo.py alpha 0.3  ** beware: cluster count or cluster mapping incorrect! **')
 print()
 
 fileName = ''
@@ -138,7 +138,8 @@ clusterSize = 1024
 totalSize = (sizeByte & 0x7F) * clusterSize
 header_dirSize =  dirEntCount * int(clusterSize/4)
 capacity =  totalSize - header_dirSize
-print(' ROM capacity: (' + str(totalSize) + ' - ' + str(header_dirSize) + '): ' + str(capacity) + ', ' + str(int(capacity / clusterSize)) + '/' + hex(int(capacity / clusterSize)) + ' clusters.')
+capacityInClusters = int(capacity / clusterSize)
+print(' ROM data capacity: (' + str(totalSize) + ' - ' + str(header_dirSize) + '): ' + str(capacity) + ', ' + str(capacityInClusters) + '/' + hex(capacityInClusters) + ' clusters.')
 
 vChar = rawHeader[0x17]
 if (chr(vChar) == 'V'):
@@ -153,6 +154,7 @@ date = rawHeader[0x1A:0x20].decode('utf-8')
 print(' 25th to 32th byte are the ROM date (MMDDYY): \'' + str(date) + '\'')
 
 def dirEntry(entry):
+#    print('raw: ' + str(entry))
     if (entry[0] == 0xE5):
         return(hex(entry[0]) + ' -- empty --')
     else:
@@ -188,7 +190,7 @@ def stripBit8(byteStr):
 dirBlocks = int(dirEntCount / 4)
 
 print()
-print('  name    ext e RSA   clusters used')
+print('  name    ext e RSA   clusters used (dirEntryIndex/clusterValue)')
 
 for block in range(dirBlocks):
     print('  Directory block: ' + str(block))
