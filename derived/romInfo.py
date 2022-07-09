@@ -145,7 +145,7 @@ else:
 sectorSize = 128
 blockSize = sectorSize * 8
 totalSize = (sizeByte & 0x7F) * 1024
-header_dirSize =  dirEntCount * sectorSize
+header_dirSize =  int(dirEntCount / 4 * sectorSize)
 capacity =  totalSize - header_dirSize
 capacityInBlocks = int(capacity / blockSize)
 print(' ROM data capacity: (' + str(totalSize) + ' - ' + str(header_dirSize) + '): ' + str(capacity) + ', ' + str(capacityInBlocks) + '/' + hex(capacityInBlocks) + ' blocks (0x01-' + hex(capacityInBlocks+1) + ').')
