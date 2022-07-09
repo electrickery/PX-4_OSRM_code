@@ -54,6 +54,11 @@ def getRomHeaderAddr(fileName, fileSize):
         print('Unknown ROM size: ' + str(fileSize) + ', must be 8192, 16384 or 32768')
     return -1
     
+def valueWithinMargin(value, reference, margin):
+    if ((value > reference - margin) and (value < reference + margin)):
+        return True
+    return False
+
 print('romInfo.py alpha 0.3  ** beware: cluster count or cluster mapping incorrect! **')
 print()
 
@@ -110,13 +115,16 @@ elif (sizeByte == 0xA0):
 else:
     print('3rd byte not a valid ROM size: ' + hex(sizeByte) + ' not ok.')
 
-sizeOk = False
-if ((sizeByte == 0x08 or sizeByte == 0x88) and fileSize != 8192):
-    print(' sizeByte (' + hex(sizeByte) + ') does not match fileSize: ' + str(fileSize) + ', not ok.')
-else:
-    sizeOk = True
+sizeMargin = 1024
+firstSize = sizeByte & 0x7F     # erase chained ROM bit
 
-if (sizeOk):
+if ((firstSize == 0x08) and not valueWithinMargin(fileSize, 8192, sizeMargin)):
+    print('sizeByte (' + hex(sizeByte) + ') does not match fileSize: ' + str(fileSize) + ', not ok.')
+elif ((firstSize == 0x10) and not valueWithinMargin(fileSize, 16384, sizeMargin)):
+    print('sizeByte (' + hex(sizeByte) + ') does not match fileSize: ' + str(fileSize) + ', not ok.')    
+elif ((firstSize == 0x20) and not valueWithinMargin(fileSize, 32768, sizeMargin)):
+    print('sizeByte (' + hex(sizeByte) + ') does not match fileSize: ' + str(fileSize) + ', not ok.')    
+else:
     print(' Size byte ('+ hex(sizeByte) + ') matches file size(' + str(fileSize) + '), ok.')
 
 defChecksum = (rawHeader[3] + rawHeader[4] * 256) & 0xFFFF
@@ -134,12 +142,13 @@ if (dirEntCount == 0x04 or dirEntCount == 0x08 or dirEntCount == 0x0C or dirEntC
 else:
     print('21th byte is directory entry count error: ' + str(dirEntCount) + ', not ok.')
 
-clusterSize = 1024
-totalSize = (sizeByte & 0x7F) * clusterSize
-header_dirSize =  dirEntCount * int(clusterSize/4)
+sectorSize = 128
+blockSize = sectorSize * 8
+totalSize = (sizeByte & 0x7F) * 1024
+header_dirSize =  dirEntCount * sectorSize
 capacity =  totalSize - header_dirSize
-capacityInClusters = int(capacity / clusterSize)
-print(' ROM data capacity: (' + str(totalSize) + ' - ' + str(header_dirSize) + '): ' + str(capacity) + ', ' + str(capacityInClusters) + '/' + hex(capacityInClusters) + ' clusters.')
+capacityInBlocks = int(capacity / blockSize)
+print(' ROM data capacity: (' + str(totalSize) + ' - ' + str(header_dirSize) + '): ' + str(capacity) + ', ' + str(capacityInBlocks) + '/' + hex(capacityInBlocks) + ' blocks (0x01-' + hex(capacityInBlocks+1) + ').')
 
 vChar = rawHeader[0x17]
 if (chr(vChar) == 'V'):
@@ -172,12 +181,12 @@ def dirEntry(entry):
             arcBit = '-'
         bits = roBit + sysBit + arcBit
         extend = str(int(entry[0x0C]))
-        clustersUsed = '  '
-        for cluster in range(0x10,0x20):
-            if (entry[cluster] != 0):
-                clustersUsed = clustersUsed + hex(cluster) + '/' + str(hex(entry[cluster])) + ' '
+        blocksUsed = '  '
+        for block in range(0x10,0x20):
+            if (entry[block] != 0):
+                blocksUsed = blocksUsed + hex(block) + '/' + str(hex(entry[block])) + ' '
                 
-        retStr = str(entry[0]) + ':' + str(stripBit8(entry[1:12]))+ ' ' + extend + ' ' + bits + ' ' + str(clustersUsed)
+        retStr = str(entry[0]) + ':' + str(stripBit8(entry[1:12]))+ ' ' + extend + ' ' + bits + ' ' + str(blocksUsed)
         return(retStr)
         # 
 
@@ -190,7 +199,7 @@ def stripBit8(byteStr):
 dirBlocks = int(dirEntCount / 4)
 
 print()
-print('  name    ext e RSA   clusters used (dirEntryIndex/clusterValue)')
+print('  name    ext e RSA     blocks used (dirEntryIndex/blockValue)')
 
 for block in range(dirBlocks):
     print('  Directory block: ' + str(block))
