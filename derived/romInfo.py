@@ -125,7 +125,7 @@ elif ((firstSize == 0x10) and not valueWithinMargin(fileSize, 16384, sizeMargin)
 elif ((firstSize == 0x20) and not valueWithinMargin(fileSize, 32768, sizeMargin)):
     print('sizeByte (' + hex(sizeByte) + ') does not match fileSize: ' + str(fileSize) + ', not ok.')    
 else:
-    print(' Size byte ('+ hex(sizeByte) + ') matches file size(' + str(fileSize) + '), ok.')
+    print(' Size byte ('+ hex(sizeByte) + ') matches file size: ' + str(fileSize) + ' (' + str(sizeByte * 1024) + ' +/-' + str(sizeMargin) + ' margin), ok.')
 
 defChecksum = (rawHeader[3] + rawHeader[4] * 256) & 0xFFFF
 print(' 4th & 5th byte checksum is: ' + hex(defChecksum));
@@ -148,7 +148,7 @@ totalSize = (sizeByte & 0x7F) * 1024
 header_dirSize =  int(dirEntCount / 4 * sectorSize)
 capacity =  totalSize - header_dirSize
 capacityInBlocks = int(capacity / blockSize)
-print(' ROM data capacity: (' + str(totalSize) + ' - ' + str(header_dirSize) + '): ' + str(capacity) + ', ' + str(capacityInBlocks) + '/' + hex(capacityInBlocks) + ' blocks (0x01-' + hex(capacityInBlocks+1) + ').')
+print(' ROM data capacity: (' + str(totalSize) + ' - ' + str(header_dirSize) + '): ' + str(capacity) + ', ' + str(capacityInBlocks) + '/' + hex(capacityInBlocks) + ' blocks (0x01-' + hex(capacityInBlocks) + ').')
 
 vChar = rawHeader[0x17]
 if (chr(vChar) == 'V'):
