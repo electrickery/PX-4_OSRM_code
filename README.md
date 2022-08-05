@@ -10,4 +10,4 @@ Scans of the OSRM can be found here: https://electrickery.nl/comp/px4/doc/. Thes
 
 The intention here is to have ASCII versions of the programs (BASIC and Z80 assembler) ready to run or to assemble and run.
 
-There is no licence here, as the code is created by Epson. The PX-4 Operating System Reference Manual is published in 1985. Publication numner Y20699101600.
+There is no licence here, as the code is created and copyrighted by Epson. The PX-4 Operating System Reference Manual is published in 1985. Publication number Y20699101600.

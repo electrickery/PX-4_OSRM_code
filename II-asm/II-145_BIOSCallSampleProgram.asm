@@ -60,7 +60,7 @@ START:
         LD      BC,9            ; Parameter number.
         LDIR                    ; Copy.
 ;
-        LD      HL,OPENPRM      ; Open parameter.
+        LD      HL,OPNPRM      ; Open parameter.
         LD      B,RSOPN         ; RS232C open function.
         CALL    RSIOX           ; OPEN.
         OR      A               ; Error return?
@@ -347,7 +347,7 @@ RETRY:
 ;
 DSPEND:
         LD      IX,XUSRSCRN     ; Change to user screen.
-        LD      A,OFFH          ;  OS bank.
+        LD      A,0FFH          ;  OS bank.
         LD      (DISBNK),A      ;
         CALL    CALLX           ;
 ;

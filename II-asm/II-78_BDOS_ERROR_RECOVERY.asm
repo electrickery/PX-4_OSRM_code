@@ -5,11 +5,11 @@
 ;       NOTE:
 ;       <> assemble condition <>
 ;
-        .Z80
+;        .Z80
 ;
 ;       <> loading address <>
 ;
-        .PHASE  100H
+			ORG		0100h	;	.PHASE  100H
 ;
 ;       <> constant values <>
 ;
@@ -188,7 +188,7 @@ ERRCHK:
 ;
 ;       BDOS ERROR INFORMATION.
 ;
-DOSER:
+BDOSER:
         PUSH    BC              ; Save return code.
         LD      HL,MSG04        ; BDOS error code message.
         CALL    DSPMSG          ; Display message.
@@ -228,6 +228,7 @@ BADSEL:
 ;
 ;       READ ONLY DISK.
 ;
+RODISK:
         LD      HL,MSG07        ; Read only disk message.
         CALL    DSPMSG          ; Display message.
         CALL    KEYIN           ; Input any key.
@@ -235,6 +236,7 @@ BADSEL:
 ;
 ;       READ ONLY FILE.
 ;
+ROFILE:
         LD      HL,MSG08        ; Read only file message.
         CALL    DSPMSG          ; Display message.
         CALL    KEYIN           ; Input any key.
@@ -242,6 +244,7 @@ BADSEL:
 ;
 ;       MICRO CASSETTE ERROR.
 ;
+MCTERR:
         LD      HL,MSG09        ; Micro cassette error message.
         CALL    DSPMSG          ; Display message.
         CALL    KEYIN           ; Input any key.
@@ -269,84 +272,84 @@ XROFILE:
 ;       NEW ERROR VECTOR
 ;
 VECTOR:
-        DW      XBADSEC         ; Bad sector
-        DW      XBADSEL         ; Bad select
-        DW      XRODISK         ; Read only disk
-        DW      XROFILE         ; Read only file
+        DEFW    XBADSEC         ; Bad sector
+        DEFW    XBADSEL         ; Bad select
+        DEFW    XRODISK         ; Read only disk
+        DEFW    XROFILE         ; Read only file
 ;
 ;       MESSAGE
 ;
 MSG01:
-        DB      0CH
-        DB      'Select BDOS error recover type.', 0DH,0AH
-        DB      '  1 -- Using SETERR',0DH,0AH
-        DB      '  2 -- Replacing error vector',0DH,0AH
-        DB      00H
+        DEFB    0CH
+        DEFB    'Select BDOS error recover type.', 0DH,0AH
+        DEFB    '  1 -- Using SETERR',0DH,0AH
+        DEFB    '  2 -- Replacing error vector',0DH,0AH
+        DEFB    00H
 MSG04:
-        DB      0DH,0AH
-        DB      'BDOS return code is '
-        DB      00H
+        DEFB    0DH,0AH
+        DEFB    'BDOS return code is '
+        DEFB    00H
 MSG05:
-        DW      MSG050
-        DW      MSG051
-        DW      MSG052
-        DW      MSG053
-        DW      MSG054
-        DW      MSG055
-        DW      MSG056
-        DW      MSG057
+        DEFW    MSG050
+        DEFW    MSG051
+        DEFW    MSG052
+        DEFW    MSG053
+        DEFW    MSG054
+        DEFW    MSG055
+        DEFW    MSG056
+        DEFW    MSG057
 MSG050:
-        DB      0DH,0AH
-        DB      'Normal return.',0DH,0AH
-        DB      00H
+        DEFB    0DH,0AH
+        DEFB    'Normal return.',0DH,0AH
+        DEFB    00H
 MSG051:
-        DB      0DH,0AH
-        DB      'Read error.',0DH,0AH
-        DB      00H
+        DEFB    0DH,0AH
+        DEFB    'Read error.',0DH,0AH
+        DEFB    00H
        
 MSG052:
-        DB      0DH,0AH
-        DB      'Write error.',0DH,0AH
-        DB      00H
+        DEFB    0DH,0AH
+        DEFB    'Write error.',0DH,0AH
+        DEFB    00H
 MSG053:
-        DB      0DH,0AH
-        DB      'Write protect error.',0DH,0AH
-        DB      00H
+        DEFB    0DH,0AH
+        DEFB    'Write protect error.',0DH,0AH
+        DEFB    00H
 MSG054:
-        DB      0DH,0AH
-        DB      'Time over error.',0DH,0AH
-        DB      00H
+        DEFB    0DH,0AH
+        DEFB    'Time over error.',0DH,0AH
+        DEFB    00H
 MSG055:
-        DB      0DH,0AH
-        DB      'Seek error.',0DH,0AH
-        DB      00H
+        DEFB    0DH,0AH
+        DEFB    'Seek error.',0DH,0AH
+        DEFB    00H
 MSG056:
-        DB      0DH,0AH
-        DB      'Break error.',0DH,0AH
-        DB      00H
+        DEFB    0DH,0AH
+        DEFB    'Break error.',0DH,0AH
+        DEFB    00H
 MSG057:
-        DB      0DH,0AH
-        DB      'Power off error.',0DH,0AH
-        DB      00H
+        DEFB    0DH,0AH
+        DEFB    'Power off error.',0DH,0AH
+        DEFB    00H
         
 MSG06:
-        DB      0DH,0AH
-        DB      'Bad select.',0DH,0AH
-        DB      00H
+        DEFB    0DH,0AH
+        DEFB    'Bad select.',0DH,0AH
+        DEFB    00H
 
 MSG07:
-        DB      0DH,0AH
-        DB      'Read only disk.',0DH,0AH
-        DB      00H
+        DEFB    0DH,0AH
+        DEFB    'Read only disk.',0DH,0AH
+        DEFB    00H
 
 MSG08:
-        DB      0DH,0AH
-        DB      'Read only file.',0DH,0AH
-        DB      00H
+        DEFB    0DH,0AH
+        DEFB    'Read only file.',0DH,0AH
+        DEFB    00H
 
 MSG09:
-        DB      0DH,0AH
-        DB      'Micro cassette error.',0DH,0AH
-        DB      00H
+        DEFB    0DH,0AH
+        DEFB    'Micro cassette error.',0DH,0AH
+        DEFB    00H
 
         END

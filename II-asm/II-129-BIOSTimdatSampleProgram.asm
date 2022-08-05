@@ -8,11 +8,11 @@
 ;               
 ;       <> assemble condition <>
 ;
-        .Z80
+;        .Z80
 ;
 ;       <> loading address <>
 ;
-        .PHASE  100h
+			ORG		0100h	;	.PHASE  100h
 ;
 ;       <> constant values <>
 ;
@@ -34,7 +34,7 @@ MAINSP          EQU     01000H  ; Stack pointer.
 START:
         LD      SP,MAINSP       ; Set stack pointer
 ;
-        LD      HL,CUSROFF      ; Cursor off data.
+        LD      HL,CURSOFF      ; Cursor off data.
         CALL    DSPMSG
 ;
         LD      HL,MSG01        ; Date & time message.
@@ -135,13 +135,18 @@ TIMESET:
         LD      HL,NTIME        ; Set time data to old time area.
         LD      DE,OTIME        ; 
         LD      BC,6            ; B is counter.
+        LDIR                    ; Move new data to old area.
+;
+        LD      HL,NTIME        ; Set BCD data to message area with ASCII.
+        LD      DE,DATE         ; HL is source, DE is destination.
+        LD      B,03H           ; B is counter
 SET10:
         CALL    SETASCII        ; Convert BCD to ASCII.
         INC     HL              ; Pointer update.
         INC     DE              ;
         DJNZ    SET10           ; Loop 3 times. (Year/month/date)
 ;
-        LD      DE.TIME         ; Time date setting area.
+        LD      DE,TIME         ; Time date setting area.
         LD      B,03H
 SET20:
         CALL    SETASCII        ; Convert BCD to ASCII.
@@ -182,27 +187,28 @@ NEXT:
 ;
 ;
 CURSOFF:
-        DB      1BH,'2',00H             ; Cursor off data.
+        DEFB      1BH,'2',00H             ; Cursor off data.
 CURSON:
-        DB      1BH,'3'00H              ; Cursor on data.
+        DEFB      1BH,'3'00H              ; Cursor on data.
 ;
 MSG01:
-        DB      0CH
-        DB      'Present date is         .',0DH,0AH
-        DB      'Present time is         .'
-        DB      00H
+        DEFB      0CH
+        DEFB      'Present date is         .',0DH,0AH
+        DEFB      'Present time is         .'
+        DEFB      00H
 MSG02:
-        DB      1BH,'=',20H,30H         ; Direct cursor.
+        DEFB      1BH,'=',20H,30H         ; Direct cursor.
 DATE:
-        DB      '00/00/00'
-        DB      1BH,'=',21H,30H         ; Direct cursor.
-        DB      '00:00:00'
-        DB      00H
+        DEFB      '00/00/00'
+        DEFB      1BH,'=',21H,30H         ; Direct cursor.
+TIME:
+        DEFB      '00:00:00'
+        DEFB      00H
 ;
 ;
 NTIME:
-        DS      7
+        DEFS      7
 OTIME:
-        DS      7
+        DEFS      7
 ;
         END

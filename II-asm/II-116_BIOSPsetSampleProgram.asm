@@ -8,11 +8,11 @@
 ;
 ;       <> assemble condition <>
 ;
-        .Z80
+;        .Z80
 ;
 ;       <> loading address <>
 ;
-        .PHASE  100h
+                ORG		0100h	;	.PHASE  100h
 ;
 ;       <> constant values <>
 ;
@@ -47,6 +47,11 @@ PLOOP2:
         LD      B,00H                   ; Read VRAM data only.
         CALL    PSET                    ; Write VRAM.
 ;
+        INC     HL                      ; Get destination address.
+        LD      B,C                     ; Move reading data to setting register.
+        LD      C,02H                   ; OR function code.
+        CALL    PSET                    ; Write VRAM.
+        
         DEC     HL                      ; Set next destination address.
         POP     BC                      ; Restore loop counter 2.
         DJNZ    PLOOP2                  ; Not 0, then loop.

@@ -9,10 +9,10 @@
 ;               item keyboard installed, the CTRL-key is different.
 ;
 ;       <> assemble conditions <>
-        .Z80
+;        .Z80
 ;
 ;       <> loading address <>
-        .PHASE  100H
+			ORG		0100h		;.PHASE  100H
 ;
 ;       <> constant values <>
 ;
