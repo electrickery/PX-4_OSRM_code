@@ -1,0 +1,53 @@
+II-055_SystemDisplay.asm                    CTRLHELP.COM
+II-078_BDOS_ERROR_RECOVERY.asm
+II-093_BIOSHookSampleProgram.asm
+II-116_BIOSPsetSampleProgram.asm            VSHIFT.COM
+II-122_BIOSBeepSampleProgram.asm            WHITBEEP.COM
+II-129-BIOSTimdatSampleProgram.asm          BSTIMDAT.COM
+II-145_BIOSCallSampleProgram.asm
+II-153_BIOSMask1SampleProgram.asm
+II-155_LoadxSampleProgram2.asm
+II-155_LoadxSampleProgram.asm
+II-164_BIOSGetpfkSampleProgram.asm
+II-169_ReadDIPSwitch_PowerSwitch.asm
+II-177_SetAutoStartString.asm
+II-224_DisplayKeyStatus.asm
+II-227_KeyInByUsingHalt.asm
+II-275_ChangeScreenAreaProgram.asm
+II-278_ConsoleDirectDisplaySample.asm
+II-340_ChangeDiskTranslateTable.asm
+II-374_ChangeRAMDisk_UserBIOSSizeProgram.asm
+II-409_FDDUtility.asm
+II-443_HookSampleProgram.asm
+II-484_PowerOff_AlarmControlProgram.asm
+II-549_ModemSampleProgram.asm
+II-581_1MbitROMReadProgram.asm
+
+III14_1.bas  Cartridge IO mode interface test program
+III14_2.bas  Cartridge OT mode interface test program
+III14_3.bas  Cartridge DB mode interface test program
+III14_4.bas  Cartridge set mode example program
+III20_1.bas  Cartridge interface test program
+III33_1.bas  Bar Code Reader sample program
+III34_1.bas  Frequency Counter sample program
+III41_1.bas  Printer interface test program
+III41_2.bas  1 second counter program
+III41_3.bas  1/10 second counter program
+III42_1.bas  DIP-swich status program
+III42_2.bas  LED test program
+III43_1.bas  Execution time measure program
+III43_2.bas  Power ON print date/time program
+III43_3.bas  Power ON save time to file program
+III43_4.bas  Power ON read time from file program
+III45_1.bas  Power OFF program
+
+
+II-145_BIOSCallSampleProgram.asm
+
+The program tests the RS232C port via extended BIOS calls. It has two main control keys:
+ - STOP exits the program
+ - HELP toggles sending the string '0123456789' over the serial port.
+ 
+Other keys are echoed to the console. Received characters are echoed to the console in reverse.
+
+When an communication error occurs, the HL, DE, BC and AF registers are dumped.
