@@ -1,13 +1,14 @@
-II-055_SystemDisplay.asm                    CTRLHELP.COM
+II-asm:
+
+II-055_SystemDisplay.asm                    CTRLHELP.COM (access SYSTEM DISPLAY with item keyboard)
 II-078_BDOS_ERROR_RECOVERY.asm
 II-093_BIOSHookSampleProgram.asm
 II-116_BIOSPsetSampleProgram.asm            VSHIFT.COM
 II-122_BIOSBeepSampleProgram.asm            WHITBEEP.COM
 II-129-BIOSTimdatSampleProgram.asm          BSTIMDAT.COM
-II-145_BIOSCallSampleProgram.asm
+II-145_BIOSCallSampleProgram.asm            BSRS232C.COM (*for description see below)
 II-153_BIOSMask1SampleProgram.asm
-II-155_LoadxSampleProgram2.asm
-II-155_LoadxSampleProgram.asm
+II-155_LoadxSampleProgram.asm               Dumps RAM/ROM bank data in HEX/Chars.
 II-164_BIOSGetpfkSampleProgram.asm
 II-169_ReadDIPSwitch_PowerSwitch.asm
 II-177_SetAutoStartString.asm
@@ -15,14 +16,15 @@ II-224_DisplayKeyStatus.asm
 II-227_KeyInByUsingHalt.asm
 II-275_ChangeScreenAreaProgram.asm
 II-278_ConsoleDirectDisplaySample.asm
-II-340_ChangeDiskTranslateTable.asm
+II-340_ChangeDiskTranslateTable.asm        CHDSKTT.COM
 II-374_ChangeRAMDisk_UserBIOSSizeProgram.asm
 II-409_FDDUtility.asm
 II-443_HookSampleProgram.asm
 II-484_PowerOff_AlarmControlProgram.asm
 II-549_ModemSampleProgram.asm
-II-581_1MbitROMReadProgram.asm
+II-581_1MbitROMReadProgram.asm             1MBREAD.COM (dumps RAM disk range 20000h-3FFFFh to VRAM)
 
+III-basic:
 III14_1.bas  Cartridge IO mode interface test program
 III14_2.bas  Cartridge OT mode interface test program
 III14_3.bas  Cartridge DB mode interface test program
@@ -41,6 +43,11 @@ III43_3.bas  Power ON save time to file program
 III43_4.bas  Power ON read time from file program
 III45_1.bas  Power OFF program
 
+derived:
+II-155_LoadxSampleProgram2.asm              Like 155_LoadxSampleProgram but in 80 columns
+memdump.asm                                 Like II-155 but also dumps RAM disk and 1MBit ROM
+
+Descriptions
 
 II-145_BIOSCallSampleProgram.asm
 

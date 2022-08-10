@@ -1,0 +1,59 @@
+CP/M Operating System Manual, 6.0 Disk Parameter Tables
+
+Disk Parameter Header table
+
+00-01  XLT
+02-03  0000    BDOS scratch pad values
+04-05  0000    BDOS scratch pad values
+06-07  0000    BDOS scratch pad values
+08-09  DIRBUF  Address for BDOS directory scratch pad area. Used for all DPHs.
+0A-0B  DPB     Address for a Disk Parameter Block for this drive. Can be shared with other disks.
+0C-0D  CSV     Addresss of a scratch pad area. Unique per DPH.
+0E-0F  ALV     Address for BDOS disk storage allocation information. Unique per DPH.
+
+Disk Parameter Block
+
+00-01  SPT  Sectors per track
+02	   BSH  Data Allocation Shift Factor
+03     BLM  Data allocation Block Mask
+04     EXM  Extend Mask
+05-06  DSM  Total storage capacity of the disk
+07-08  DRM  Total number of directory entries of the disk
+09     AL0  Determine reserved directory blocks
+0A     AL1  Determine reserved directory blocks
+0B-0C  CKS  Size of the directory check vector
+0D-0E  OFF  Number of reserved tracks at the beginning of the (logical) disk
+
+The BSH and BLM define the BLS:
+BSH  BLM    BLS
+  3    7   1024
+  4   15   2048
+  5   31   4096
+  6   63   8192
+  7  127  16384
+  
+The EXM value is derived from BLS and DSM:
+BLS   DSM<256 DSM>255 
+ 1024    0       N/A
+ 2048    1        0
+ 4096    3        1
+ 8192    7        3
+16384   15        7
+
+The value of DSM is the maximum data block number for this drive, measured in BLS units.
+
+The value of DRM is one less than the total of directory entries.
+
+Each bit in AL0 and AL1 reserves a datablock for the directory entries, making 16 data blocks the maximum directory entry count.
+
+BLS tabulation (# is the number of AL0/AL1 set bits):
+BLS    Directory entries
+ 1024   32 times # bits
+ 2048   64 times # bits
+ 4096  128 times # bits
+ 8192  256 times # bits
+16384  512 times # bits
+
+CKS
+
+OFF

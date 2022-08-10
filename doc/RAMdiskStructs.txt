@@ -1,0 +1,23 @@
+Internal RAM Disk (0 kByte, 2-35 kByte)
+
+IRD+0000h - IRD+01FFh) Directory entries 1 to 16
+
+IRD+0200h - IRD+3FFh Checksum area (checksum for each 128 byte block)
+
+IRD+0400h - .... data blocks
+
+
+External RAM disk (128 kByte)
+
+00000h - 003FFh Directory entries 1 to 32
+
+00400h - 1FFFFh data blocks
+
+
+RAM cartridge (16-64 kByte)
+
+0000h - 0200h Directory entries 1 to 16
+
+0200h - 03FFh Checksum area (checksum for each 128 byte block)
+
+0400h - FFFFh data blocks

@@ -1,0 +1,12 @@
+RAM disk A:        internal RAM or I/O-addressed RAM, 90H-93H.
+ROM capsule 1 B:   RAM bank 1
+ROM capsule 2 C:   RAM bank 2
+FDD 0 D:           epsp/SERIAL disk drive 0
+FDD 1 E:           epsp/SERIAL disk drive 1
+FDD 2 F:           epsp/SERIAL disk drive 2
+FGG 3 G:           epsp/SERIAL disk drive 3
+Micro Cassette tape drive H:
+RAM cartridge I:   cartridge interface
+ROM cartridge 1 J: cartridge interface
+ROM cartridge 2 K: cartridge interface
+1MBit ROM ?:       external RAM disk 20000h-3FFFFh

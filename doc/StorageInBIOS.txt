@@ -1,0 +1,95 @@
+Source: OSRM II-361 - II-364
+
+QT_ROM_CP1 (0EF97h) ROM capsule 1, B: capacity
+QT_ROM_CP2 (0EF98h) ROM capsule 2, C: capacity
+QT_ROM_CR1 (0EF99h) ROM cartridge 1, J: capacity
+QT_ROM_CR2 (0EF9Ah) ROM cartridge 2, K: capacity
+ bit 0-6: ROM capacity (00h, 08h, 10h, 20h)
+ bit 7: chained flag (0 = standalone, 1 = chained)
+
+QT_RAM_CR (0EF9Bh) RAM cartridge capacity
+ 00h - no cartridge installed
+ 10h - 16 kByte RAM cartridge installed
+ 20h - 32 kByte RAM cartridge installed
+ 40h - 64 kByte RAM cartridge installed
+ 
+QT_RAM_IN (0EF9Ch) Internal RAM disk capacity
+ 00h, 02h-23h kByte
+ 
+QT_RAM_EX (0EF9Dh) External RAM disc capacity
+ 00h - no external RAM disk installed
+ 40h - 64 kByte external RAM disk installed
+ 80h - 128 kByte external RAM disk installed
+
+DR_ROM_CP1 (0EF9Eh) number of directory entries ROM capsule 1, B:
+DR_ROM_CP2 (0EF9Fh) number of directory entries ROM capsule 2, C:
+DR_ROM_CR1 (0EFA0h) number of directory entries ROM cartridge 1, J:
+DR_ROM_CR2 (0EFA1h) number of directory entries ROM cartridge 2, K:
+AD_ROM_CP1 (0EFA2H) ROM capsule 1, B: header address
+AD_ROM_CP2 (0EFA3H) ROM capsule 2, C: header address
+AD_ROM_CR1 (0EFA2H) ROM cartridge 1, J: header address (always 0000h)
+AD_ROM_CP2 (0EFA3H) ROM cartridge 2, K: header address (always 0000h)
+AD_RAM_IN  (0EFA4h) Internal RAM A: disk header address
+
+DISKTBL (0F0FFh) logical/physical drives association table
+
+ROMCPNO1 (0F10Ah) ROM capsule 1 drive code
+ROMCPN02 (0F10Bh) ROM capsule 2 drive code
+
+DISKROV (0F10Ch) Disk R/O vector
+
+FSTAB
+READTAB
+WRITETAB
+
+DPBASE (0F150h) Disk parameter headers (DPH)
+
+DPE0 (0F150h)
+DPE1 (0F151h) DPH for ROM capsule 1, B:
+DPE2 (0F152h) DPH for ROM capsule 2, C:
+DPE3 (0F153h) DPH for FDD1, D:
+DPE4 (0F154h) DPH for FDD2, E:
+DPE5 (0F155h) DPH for FDD3, F:
+DPE6 (0F156h) DPH for FDD4, G:
+DPE7 (0F157h) DPH for MCT, microcassette, H:
+DPE8 (0F158h) DPH for ROM cartridge 1, J:
+DPE9 (0F159h) DPH for ROM catrridge 2, K:
+DPE10 (0F15Ah) DPH for RAM cartridge, I:
+
+DPB0 (0F200h) DPB (Disk Parameter Block) for RAM disk
+DPB1 (0F20Fh) DPB (Disk Parameter Block) for ROM capsule 1, B:
+DPB2 (0F21Eh) DPB (Disk Parameter Block) for ROM capsule 2, C:
+DPB3 (0F22Dh) DPB (Disk Parameter Block) for FDD, D:, E:, F:, G:
+DPB7 (0F2CFh) DPB (Disk Parameter Block) for MCT, H: (microcassette)
+DPB8 (0F24Bh) DPB (Disk Parameter Block) for ROM cartridge 1, J:
+DPB9 (0F287h) DPB (Disk Parameter Block) for ROM cartridge 2, K:
+DPB10 (0F296h) DPB (Disk Parameter Block) for RAM cartridge, I:
+
+DIRBUF (0F5FBh) Directory access buffer (128 bytes)
+
+ALV0 (0F67Bh) RAM Disk Allocation Area (32 bytes)
+CSV0          RAM Disk Checksum Area (0 bytes)
+ALV1 (0F69Bh) ROM capsule 1, B: Disk Allocation Area (9 bytes)
+CSV1          ROM capsule 1, B: Disk Checksum Area (0 bytes)
+ALV2 (0F6A4h) ROM capsule 2, C: Disk Allocation Area (9 bytes)
+CSV2          ROM capsule 2, C: Disk Checksum Area (0 bytes)
+ALV3 (0F6A4h) FDD 1, D: Disk Allocation Area (18 bytes)
+CSV3          FDD 1, D: Disk Checksum Area (16 bytes)
+ALV4 (0F6CFh) FDD 1, E: Disk Allocation Area (18 bytes)
+CSV4          FDD 1, E: Disk Checksum Area (16 bytes)
+ALV5 (0F6F1h) FDD 1, F: Disk Allocation Area (18 bytes)
+CSV5          FDD 1, F: Disk Checksum Area (16 bytes)
+ALV6 (0F713h) FDD 1, G: Disk Allocation Area (18 bytes)
+CSV6          FDD 1, G: Disk Checksum Area (16 bytes)
+ALV7 (0F735h) MCT H: Disk Allocation Area (8 bytes)
+CSV7          MCT H: Disk Checksum Area (16 bytes)
+ALV8 (0F74Dh) RAM cartridge I: Disk Allocation Area (8 bytes)
+CSV8          RAM cartridge I: Disk Checksum Area (4 bytes)
+ALV9 (0F759h) ROM cartridge 1, J: Disk Allocation Area (9 bytes)
+CSV9          ROM cartridge 1, J: Disk Checksum Area (0 bytes)
+ALV10 (0F761h) ROM cartridge 2, K :Disk Allocation Area (9 bytes)
+CSV10          ROM cartridge 2, K: Disk Checksum Area (0 bytes)
+
+SYSFCB (0F88Dh) System FCB (File Control Block) (36 bytes)
+
+SYSDMA (0F8B1h) System DMA (Direct memory Access) (128 bytes)

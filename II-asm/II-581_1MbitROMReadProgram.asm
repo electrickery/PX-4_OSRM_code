@@ -8,11 +8,11 @@
 ;
 ;	<> assemble condition <>
 ;
-	.Z80
+;	.Z80
 ;
 ;	<> loading address <>
 ;
-	.PHASE 100H
+                ORG     0100h   ;       .PHASE 100H
 ;
 ;	<> constant values <>
 ;
@@ -119,6 +119,7 @@ MAIN40:
 ;
 ;	CAUTION :
 READROM:
+        CALL    OPNRAMD
 	LD	A,(P90DT)	; Last 8 bits data.
 	INC	A		; 256 bytes read?
 	LD	(P90DT),A	;  Set the new address.
@@ -143,7 +144,23 @@ READ40:
 ;
 READ50:
 	IN	A,(P93)		; Read ROM data.
+        CALL    CLSRAMD
 	RET			; 
+        
+OPNRAMD:
+        PUSH    AF
+        LD      A, 00000011b    ; EXTSR, (OPN + WP)
+        OUT     (P94), A
+        POP     AF
+        RET
+
+CLSRAMD:
+        PUSH    AF
+        LD      A, 00000001b    ;EXTSR, (WP)
+        OUT     (P94), A
+        POP     AF
+        RET
+        
 ;
 ;	***************************************************
 ;		CHECK CONNECTING EXTERNAL RAM DISK
@@ -192,10 +209,10 @@ CURSOFF:
 ;
 ;
 P90DT:
-	DB	0FFH
+	DEFB	0FFH
 P91DT:
-	DB	0FFH
+	DEFB	0FFH
 P92DT:
-	DB	001H
+	DEFB	001H
 ;
 	END

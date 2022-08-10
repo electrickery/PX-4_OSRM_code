@@ -6,11 +6,11 @@
 ;               
 ;       <> assemble condition <>
 ;
-        .Z80
+;        .Z80
 ;
 ;       <> loading address <>
 ;
-        .PHASE  100h
+                ORG     100H    ; .PHASE  100h
 ;
 ;       <> constant values <>
 ;
@@ -355,6 +355,7 @@ DSPEND:
         POP     DE              ;
         POP     BC              ;
         POP     AF              ;
+        RET
 ;
 ;       ********************************************************
 ;               CHANGE BINARY TO ASCII
@@ -409,35 +410,35 @@ CONV25:
 ;       ********************************************************
 ;
 RGSMSG:
-        DB      CR,LF
-        DB      'Parameter display',CR,LF
-        DB      'HL -- '
+        DEFB      CR,LF
+        DEFB      'Parameter display',CR,LF
+        DEFB      'HL -- '
 HLDSP:
-        DS      4
-        DB      TAB
-        DB      'DE -- '
+        DEFS      4
+        DEFB      TAB
+        DEFB      'DE -- '
 DEDSP:
-        DS      4
-        DB      CR,LF
-        DB      'BC -- '
+        DEFS      4
+        DEFB      CR,LF
+        DEFB      'BC -- '
 BCDSP:
-        DS      4
-        DB      TAB
-        DB      'AF -- '
+        DEFS      4
+        DEFB      TAB
+        DEFB      'AF -- '
 AFDSP:
-        DS      4
-        DB      CR,LF
+        DEFS      4
+        DEFB      CR,LF
 DTDSP:
-        DS      20
-        DB      CR,LF
-        DB      'Press HELP to continue'
-        DB      0
+        DEFS      20
+        DEFB      CR,LF
+        DEFB      'Press HELP to continue'
+        DEFB      0
 ;
 ;       ********************************************************
 ;               WORK DATA
 ;       ********************************************************
 ;
 OPNPRM:
-        DS      9               ; RSIOX open parameter area.
+        DEFS      9               ; RSIOX open parameter area.
 ;
         END
