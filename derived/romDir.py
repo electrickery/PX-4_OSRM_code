@@ -25,8 +25,6 @@ def getRomHeaderAddr(fileName, fileSize):
         file.seek(P16k)
         block2k = file.read(32)
         file.close()
-        print('0k: ' + hex(block0k[0]) + ' ' + hex(block0k[1]))
-        print('2k: ' + hex(block2k[0]) + ' ' + hex(block2k[1]))
         if (block0k[0] == 0xE5 and block0k[1] == 0x37): # M
             return(M16k)
         elif (block2k[0] == 0xE5 and block2k[1] == 0x50): # P
@@ -40,8 +38,6 @@ def getRomHeaderAddr(fileName, fileSize):
         file.seek(P32k)
         block6k = file.read(32)
         file.close()
-        print('4k: ' + hex(block4k[0]) + ' ' + hex(block4k[1]))
-        print('6k: ' + hex(block6k[0]) + ' ' + hex(block6k[1]))
         if (block4k[0] == 0xE5 and block4k[1] == 0x37): # M
             return(M32k)
         elif (block6k[0] == 0xE5 and block6k[1] == 0x50): # P
@@ -57,12 +53,11 @@ def valueWithinMargin(value, reference, margin):
         return True
     return False
 
-print('romInfo.py alpha 0.3  ** beware: cluster count or cluster mapping incorrect! **')
+print('romDir.py alpha 0.2')
 print()
 
 fileName = ''
-#fileName = '../CampbellROMs/ASM-DBG80.COM.BIN'
-#fileName = '../CampbellROMs/PC_4.0_SPC_analyzer_ROM.BIN'
+
 if (len(sys.argv) > 1):
     fileName = sys.argv[1]
 if (not fileName):
@@ -110,9 +105,7 @@ romName = rawHeader[8:0x16].decode('utf-8')
 print(' ROM NAME: \'' + str(romName) + '\'')
 
 dirEntCount = rawHeader[0x16]
-if (dirEntCount == 0x04 or dirEntCount == 0x08 or dirEntCount == 0x0C or dirEntCount == 0x10 or dirEntCount == 0x14 or dirEntCount == 0x1C or dirEntCount == 0x20):
-    print(' Directory entry count: ' + str(dirEntCount))
-else:
+if (dirEntCount != 0x04 and dirEntCount != 0x08 and dirEntCount != 0x0C and dirEntCount != 0x10 and dirEntCount != 0x14 and dirEntCount != 0x1C and dirEntCount != 0x20):
     print('Directory entry count error: ' + str(dirEntCount) + ', not ok.')
     exit(7)
 
@@ -122,7 +115,7 @@ totalSize = (sizeByte & 0x7F) * 1024
 header_dirSize =  int(dirEntCount / 4 * sectorSize)
 capacity =  totalSize - header_dirSize
 capacityInBlocks = int(capacity / blockSize)
-print(' ROM data capacity: (' + str(totalSize) + ' - ' + str(header_dirSize) + '): ' + str(capacity) + ', ' + str(capacityInBlocks) + '/' + hex(capacityInBlocks) + ' blocks (0x01-' + hex(capacityInBlocks) + ').')
+print(' ROM data capacity: ' + str(capacity) + ' bytes')
 
 version = rawHeader[0x17:0x1A].decode('utf-8')
 print(' ROM version: \'' + str(version) + '\'')
