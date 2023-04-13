@@ -8,11 +8,11 @@
 ;
 ;       <> assemble condition <>
 ;
-        .Z80
+;        .Z80
 ;
 ;       <> loading address <>
 ;
-        .PHASE  100h
+			ORG		0100h	;	.PHASE  100h
 ;
 ;       <> constant values <>
 ;
@@ -48,6 +48,9 @@ UB_HEAD         EQU     0CBF0H          ; Top addr of User BIOS area's header
 UB_OVWRITE      EQU     UB_HEAD +11     ;  Over write flag
 UB_RELEASE      EQU     UB_HEAD +12     ;  Release address
 ;
+BIOSENTRY       EQU     00001H          ; CP/M BIOS entry addr
+BDOSENTRY       EQU     00006H          ; CP/M BDOS entry addr
+;
 ;       OS ROM jump table
 ;
 CALADRS         EQU     00018H          ; Calculate loading addr
@@ -58,7 +61,7 @@ BIOSJTLD        EQU     0001BH          ; BIOS jump table load
 ; New RAM disk size and User BIOSsize
 SRAMDISK        EQU     30
 SUSERBIOS       EQU     4
-MAXSIZE         equ     142             ; 35.5 KB * 4
+MAXSIZE         EQU     142             ; 35.5 KB * 4
 
 ;       ********************************************************
 ;               MAIN PROGRAM
@@ -101,7 +104,10 @@ MESSAGE:
         LD      C,A             ;  A*4     --> C
         LD      B,0             ;  0       --> B
         ADD     HL,BC           ;  HL + BC --> HL
-        LD      E,(HL)          ; HL is top addr of message.
+        LD      E,(HL)          ;  (HL)    --> HL
+        INC     HL              ; HL is top addr of message.
+        LD      D,(HL)          ;
+        EX      DE,HL           ;
 ;
 MSGLOOP:
         LD      C,(HL)          ; Get message.
@@ -118,21 +124,21 @@ MSGLOOP:
 ;       Message table
 ;
 MSGTBL:
-        DW      MSG1            ;
-        DW      MSG2            ;
-        DW      MSG3            ;
-        DW      MSG4            ;
+        DEFW      MSG1            ;
+        DEFW      MSG2            ;
+        DEFW      MSG3            ;
+        DEFW      MSG4            ;
 ;
 ;       Message data
 ;
 MSG1:
-        DB      'Changing size is normally ending',0DH,0AH,00H
+        DEFB      'Changing size is normaly ending',0DH,0AH,00H
 MSG2:
-        DB      'Parameter error.',0DH,0AH,00H
+        DEFB      'Parameter error.',0DH,0AH,00H
 MSG3:
-        DB      'User BIOS area cannot destroyed.',0DH,0AH,00H
+        DEFB      'User BIOS area cannot destroyed.',0DH,0AH,00H
 MSG4:
-        DB      'Overwrite User BIOS area.',0DH,0AH,00H
+        DEFB      'Overwrite User BIOS area.',0DH,0AH,00H
 ;        
 ;
 ;       ********************************************************
@@ -213,7 +219,7 @@ CHNG_RAM:
         INC     DE              ;
         LD      (BIOSENTRY),DE  ;
 ;
-        ID      IX,RAMDKMNT     ; RAM disk mount check.
+        LD      IX,RAMDKMNT+0   ; RAM disk mount check.
         LD      A,(SIZRAM)      ;  Entry parameter. (RAM disk size)
         OR      A               ;  No format
         CALL    CALLX           ;
@@ -292,7 +298,7 @@ CHK_SUM:
 ;
 ;       CAUTION :
 ;
-RELEASE:
+RELEAS:
         LD      A,(UB_OVWRITE)  ; Check overwrite flag.
         OR      A               ;  Cannot over write?
         SCF                     ;
@@ -315,5 +321,5 @@ REL_RET:
 ;       Work area
 ;
 RET_PRM:
-        DS      1               ; Return parameter area.
+        DEFS      1               ; Return parameter area.
         END

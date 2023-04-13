@@ -17,7 +17,7 @@ II-227_KeyInByUsingHalt.asm
 II-275_ChangeScreenAreaProgram.asm
 II-278_ConsoleDirectDisplaySample.asm
 II-340_ChangeDiskTranslateTable.asm        CHDSKTT.COM
-II-374_ChangeRAMDisk_UserBIOSSizeProgram.asm
+II-374_ChangeRAMDisk_UserBIOSSizeProgram.asm  CHRDUBPR.COM
 II-409_FDDUtility.asm                      FDDUTIL.COM
 II-443_HookSampleProgram.asm
 II-484_PowerOff_AlarmControlProgram.asm
