@@ -8,11 +8,11 @@
 
 ;       <> assemble condition <>
 ;
-        .Z80
+;        .Z80
 ;
 ;       <> loading address <>
 ;
-        .PHASE  100h
+			ORG		0100h	;	.PHASE  100h
 ;
 ;       <> constant values <>
 ;
@@ -21,7 +21,7 @@
 WBOOT           EQU     0EB03H          ; Warm Boot entry
 CONST           EQU     WBOOT   +03H    ; Console status entry
 CONIN           EQU     WBOOT   +06H    ; Console in entry
-CONOUT          EQU     WBOOT   +06H    ; Console out entry
+CONOUT          EQU     WBOOT   +09H    ; Console out entry
 CALLX           EQU     WBOOT   +66H    ; Call extra entry
 ;
 ;       System area
@@ -77,12 +77,12 @@ MAIN:
 ;
 READ:
         CALL    BREAKCHK        ;Check BREAK key (CTRL/C) press or not
-        JP      NZ,ABORT
+        JP      Z,ABORT
 ;
         CALL    SENDCMD         ;Send command to FDD.
         JP      NZ,DISKERR      ; Disk access error.
 ;
-        LD      A,(PRT_STS)     ; Return parameter.
+        LD      A,(PKT_STS)     ; Return parameter.
         OR      A               ;
         JR      NZ,READERR      ; Read error.
 ;
@@ -107,7 +107,7 @@ READ:
 ;
 ;       CAUTION :
 SENDCMD:
-        LD      HL,PKT_FMR      ; EPSP packet top address.
+        LD      HL,PKT_FMT      ; EPSP packet top address.
         XOR     A               ;  Set FMT code.
         LD      (HL),A          ;
         INC     HL              ;
@@ -122,7 +122,7 @@ SENDCMD:
         LD      A,(SEKDSK)      ;  Set drive code.
         LD      (HL),A          ;
         INC     HL              ;
-        LD      A,(SECTRK)      ;  Set seek track number.
+        LD      A,(SEKTRK)      ;  Set seek track number.
         LD      (HL),A          ;
         INC     HL              ;
         LD      A,(SEKSEC)      ;  Set seek sector number.
@@ -155,7 +155,7 @@ SENDCMD:
 ;       CAUTION :
 ;
 SETNEXT:
-        LD      A,(SECSEC)      ; Sector number increment.
+        LD      A,(SEKSEC)      ; Sector number increment.
         INC     A               ;
         LD      (SEKSEC),A      ;
         CP      65              ;  Larger than 64?
@@ -164,9 +164,9 @@ SETNEXT:
         LD      A,01H           ; Set initial value.
         LD      (SEKSEC),A      ;
 ;
-        LD      A,(SECTRK)      ; Track number increment.
+        LD      A,(SEKTRK)      ; Track number increment.
         INC     A               ;
-        LD      (SECTRK),A      ;
+        LD      (SEKTRK),A      ;
         CP      10              ;  Larger than 9?
         CCF                     ;
         RET                     ;
@@ -210,7 +210,7 @@ PRDATA:
         LD      B,1             ;Display data quantity
         CALL    DSPDATA         ;Display track number.
 ;
-        LD     HL,SECMSG        ;Sector number
+        LD      HL,SECMSG        ;Sector number
         CALL    DSPMSG
         LD      IX,SEKSEC
         LD      (READPTR),IX
@@ -286,22 +286,23 @@ DSPMSG:
 ;       Registers are not preserved.
 ;
 DSPDATA:
-        LD      A,8
+        LD      A,B
         OR      A
         RET     Z               ;If data quqntity = 0 then return
 ;
         LD      HL,CHRPKT       ;HL=Start address of character data
-        LD      IX,)READPTR)    ;IX=MCT data top address
+        LD      IX,(READPTR+0)    ;IX=MCT data top address
 DSPDT00:
         PUSH    BC
         PUSH    HL
         PUSH    IX
 ;
-        LD      A,(IX)          ;A=DATA
+        LD      A,(IX+0)          ;A=DATA
         LD      (HL),PERIOD     ;Store PERIOD mark (default data)
         BIT     7,A             ;If data is 80H through FFH or 00H through
-        CP      SPCCD           ;1FH then change to PERIOD mark and store
-        JR      C,DSPDT10       ;it in CHRPKT
+        JR      NZ,DSPDT10      ;1FH then change to PERIOD mark and store
+        CP      SPCCD           ;it in CHRPKT
+        JR      C,DSPDT10       ;
         LD      (HL),A          ;Store read data to CHRPKT
 DSPDT10:
         CALL    TOHEX           ;Convert to HEX
@@ -419,16 +420,16 @@ CHKWAIT:
 ;************************
 ;
 SEKDSK:
-        DB      01H             ;
+        DEFB      01H             ;
 SEKTRK:
-        DB      04H             ; Directory part.
+        DEFB      04H             ; Directory part.
 SEKSEC:
-        DB      01H
+        DEFB      01H
 ;
 READPTR:
-        DS      2               ;Pointer of READPKT
+        DEFS      2               ;Pointer of READPKT
 CHRPKT:
-        DS      20              ;Character data packet of MCT read data
+        DEFS      20              ;Character data packet of MCT read data
 ;
 ;************************
 ;*                      *
@@ -437,32 +438,32 @@ CHRPKT:
 ;************************
 ;
 CRLF:  
-        DB      CR,LF
-        DB      TERMINATOR
+        DEFB      CR,LF
+        DEFB      TERMINATOR
 ;
 DKERRMSG:
-        DB      CR,LF
-        DB      'Floppy disk drive access error !!'
-        DB      CR,LF
-        DB      TERMINATOR
+        DEFB      CR,LF
+        DEFB      'Floppy disk drive access error !!'
+        DEFB      CR,LF
+        DEFB      TERMINATOR
 ;
 RDERRMSG:
-        DB      CR,LF
-        DB      'Floppy disk drive read error !!'
-        DB      CR,LF
-        DB      TERMINATOR
+        DEFB      CR,LF
+        DEFB      'Floppy disk drive read error !!'
+        DEFB      CR,LF
+        DEFB      TERMINATOR
 ;
 ABORTMSG:
-        DB      CR,LF
-        DB      'Aborted'
-        DB      TERMINATOR
+        DEFB      CR,LF
+        DEFB      'Aborted'
+        DEFB      TERMINATOR
 TRKMSG:
-        DB      CR,LF
-        DB      'Track no = '
-        DB      TERMINATOR
+        DEFB      CR,LF
+        DEFB      'Track no = '
+        DEFB      TERMINATOR
 SECMSG:
-        DB      '     Sector No = '
-        DB      TERMINATOR
+        DEFB      '     Sector No = '
+        DEFB      TERMINATOR
 ;
 ;
         END

@@ -173,7 +173,7 @@ def stripBit8(byteStr):
 dirBlocks = int(dirEntCount / 4)
 
 print()
-print('U name            RSA   size')
+print('U name          e RSA    size')
 
 for block in range(dirBlocks):
     print(dirEntry(file.read(32)))	# 1

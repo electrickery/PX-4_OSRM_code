@@ -62,7 +62,7 @@ DPB2 (0F21Eh) DPB (Disk Parameter Block) for ROM capsule 2, C:
 DPB3 (0F22Dh) DPB (Disk Parameter Block) for FDD, D:, E:, F:, G:
 DPB7 (0F2CFh) DPB (Disk Parameter Block) for MCT, H: (microcassette)
 DPB8 (0F24Bh) DPB (Disk Parameter Block) for ROM cartridge 1, J:
-DPB9 (0F287h) DPB (Disk Parameter Block) for ROM cartridge 2, K:
+DPB9 (0F25Ah) DPB (Disk Parameter Block) for ROM cartridge 2, K:
 DPB10 (0F296h) DPB (Disk Parameter Block) for RAM cartridge, I:
 
 DIRBUF (0F5FBh) Directory access buffer (128 bytes)

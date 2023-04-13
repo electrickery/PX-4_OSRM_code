@@ -46,6 +46,7 @@ III45_1.bas  Power OFF program
 derived:
 II-155_LoadxSampleProgram2.asm              Like 155_LoadxSampleProgram but in 80 columns
 memdump.asm                                 Like II-155 but also dumps RAM disk and 1MBit ROM
+dumpDPB.asm                                 Dumps the Disk Parameter Block values in hex, per device.
 
 Descriptions
 

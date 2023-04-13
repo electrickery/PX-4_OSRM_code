@@ -10,3 +10,29 @@ RAM cartridge I:   cartridge interface
 ROM cartridge 1 J: cartridge interface
 ROM cartridge 2 K: cartridge interface
 1MBit ROM ?:       external RAM disk 20000h-3FFFFh
+
+
+Internal RAM disk (2-35 kByte)
+0-4 tracks
+0-63 sectors
+16 directory entries
+
+External RAM disk 120 kByte
+0-7 tracks
+0-63 sectors
+32 directory entries
+
+ROM capsule 32 kByte
+0-3 tracks
+0-63 sectors
+3-31 directory entries
+
+FDD epsp disk
+0-79 tracks
+0-15 sectors
+64 directory entries
+
+RAM cartrtidge (64 kByte)
+0-7 tracks (1 or 3 for 16 kByte and 32 kByte)
+0-63 sectors
+16 directory entries
