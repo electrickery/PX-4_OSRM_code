@@ -1,0 +1,18 @@
+III-14_1 - 2.1.7 IO mode Sample program
+III-14_2 - 2.1.7 OT mode Sample program
+III-14_3 - 2.1.7 DB mode Sample program
+III-14_4 - Mode Sample program
+III-20_1 - 2.1.1 Application circuit example Test program (82C55)
+III-33_1 - 2.4.3 Sample Program Bar Code Interface
+III-34_1 - 2.4.4 Frequency Counter
+III-41_1 - 3.1 Printer Interface
+III-41_2 - 3.2 1-Second Counter
+III-41_3 - 3.3 1/10-Second Counter
+III-42_1   3.4 DIP Switch
+III-42_2 - 3.5 LEDs; LED ON
+III-42_3 - 3.5 LEDs; LED OFF
+III-43_1 - 3.7 Timer
+III-43_2 - 3.8 Power ON
+III-43_3 - 3.8 Power ON, time to RAM disk
+III-45_1 - 3.9 Power OFF
+
