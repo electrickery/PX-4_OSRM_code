@@ -1,14 +1,12 @@
 ;       ********************************************************
-;               MEMORY DUMP SAMPLE PROGRAM
+;               MEMDUMP - memory dump for RAM and storage
+;                derived from
+;               LOADX SAMPLE PROGRAM, 1 M BIT ROM READ PROGRAM, ...
 ;       ********************************************************
 ;
 ;       NOTE :
 ;               This sample program is reading from
-;               data in the target bank or ram disk
-;               parts.
-;               It is derived from the OSRM II-155 LOADX SAMPLE PROGRAM 
-;               and II-580 1 M BIT ROM READ PROGRAM. It also has access 
-;               to the External RAM Disk.
+;               data in the target bank.
 
 ;       <> assemble condition <>
 ;
@@ -19,6 +17,12 @@
         ORG     0100H;        .PHASE  100h
 ;
 ;       <> constant values <>
+;
+;       Version
+;
+MAYORV          EQU     1
+MINORV          EQU     1
+PATCHV          EQU     0
 ;
 ;       BIOS entry
 ;
@@ -53,7 +57,10 @@ CR              EQU     0DH
 LF              EQU     0AH
 STOP            EQU     03H
 
-LINEWTH         EQU     08H
+LNWTH40         EQU     08h
+LNWTH80         EQU     10h
+ARGBUF          EQU     80h
+
 ;
 ;       ********************************************************
 ;               MAIN PROGRAM
@@ -63,7 +70,9 @@ LINEWTH         EQU     08H
 ;
         LD      SP,1000H        ; Set stack pointer.
 ;
-        LD      HL,MSG01       ; Display opening message.
+        CALL    INIT40          ; default 40 column mode
+        CALL    ARGPARS         ; check for arguments
+        LD      HL,MSG01        ; Display opening message.
         CALL    DSPMSG          ;
 ;
 MAIN10:
@@ -73,14 +82,14 @@ MAIN10:
         CALL    GETBNK          ; Select bank.  Stored in (BANK)
         JP      C,WBOOT         ; End if STOP pressed.
         LD      HL,(ADDR)
-        CALL    ASCDSP4
+        CALL    ASCDSP4         ; display the address
         CALL    SPACE
         LD      A,'-'
         CALL    CONOUTS
         CALL    SPACE
 
         LD      A,(BANK)
-        CALL    ASCDSP2         ; display inputed code.
+        CALL    ASCDSP2         ; display selected bank.
         CALL    CRLF
 
 ;
@@ -117,14 +126,15 @@ BANKDMP:
 DUMPF:
         LD      HL,MSGBD
         CALL    DSPMSG
-        LD      HL,MSG02         ; Display dump guide line.
+        LD      HL,(MSG02AD)    ; Display dump guide line, 8 or 16 bytes.
         CALL    DSPMSG
 ;
 DUMP01:
         LD      DE,ASCDATA      ; Getting memory save area for text.
         LD      HL,(ADDR)       ; Dump start address.
         CALL    ASCDSP4         ; Display address as HEX.
-        LD      B,LINEWTH           ; Loop counter.
+        LD      A,(LNWIDTH)     ; Loop counter.
+        LD      B, A
         LD      A,(BANK)        ; Select target bank.
         LD      C,A             ;
 ;
@@ -149,12 +159,16 @@ DUMP10:
         CALL    CONIN           ; Get inputed key.
         CP      ESC             ; ESC?
         RET     Z               ; Yes.
-        CP      STOP             ; STOP?
+        CP      STOP            ; STOP?
         RET     Z               ; Yes.
         CP      20H             ; Space?
         JR      NZ,DUMP01       ; No.
 ;
         CALL    CONIN           ; Stop dump until any key inputed.
+        CP      ESC             ; ESC?
+        RET     Z               ; Yes.
+        CP      STOP            ; STOP?
+        RET     Z               ; Yes.        
         JR      DUMP01          ;
 ;
 RAMDDMP:
@@ -173,7 +187,7 @@ RDMPF:
         LD      HL,MSGRD
         CALL    DSPMSG
         CALL    SPACE           ; prefix a space for the 5-digit address
-        LD      HL,MSG02        ; Display dump guide line.
+        LD      HL,(MSG02AD)    ; Display dump guide line, 8 or 16 bytes.
         CALL    DSPMSG
         LD      HL,(ADDR)       ; Initialize port values from ADDR
         LD      A,L
@@ -191,7 +205,8 @@ RDMP01:
         LD      DE,ASCDATA   
         LD      HL,(ADDR)       ; Dump start address.
         CALL    ASCDSP4         ; Display by ASCII.
-        LD      B,LINEWTH       ; Loop counter.
+        LD      A,(LNWIDTH)     ; Loop counter.
+        LD      B, A
         LD      A,(BANK)        ; Dump target bank.
         LD      C,A             ;
 ;        
@@ -202,7 +217,7 @@ RDMP10:
         CALL    ASCDSP2         ; Display data as HEX.
         INC     HL              ; Pointer update.
         INC     DE              ;
-        DJNZ    RDMP10          ; Loop LINEWTH times
+        DJNZ    RDMP10          ; Loop (LNWIDTH) times
 ;
         LD      (ADDR),HL
         LD      A,L
@@ -211,7 +226,7 @@ RDMP10:
         LD      (P91DT), A
         CALL    SPACE           ; Display 2 spaces.
         CALL    SPACE           ;
-        CALL    ASCDSPX         ; Display as TEXT. Using ASCDATA & LINWIDTH
+        CALL    ASCDSPX         ; Display as TEXT. Using ASCDATA & LNWIDTH
 ;
         CALL    CONST           ; Input any key?
         INC     A               ;
@@ -235,7 +250,8 @@ ASCDSPX:
         PUSH    HL              ;
 ;
         LD      HL,ASCDATA      ; Save data address.
-        LD      B,LINEWTH       ; Loop counter.
+        LD      A,(LNWIDTH)   ; Loop counter.
+        LD      B, A
 ASCDX1:
         LD      A,(HL)          ; Get data address.
         CP      20H             ; Control code?
@@ -692,14 +708,55 @@ CLSRAMD:
         OUT     (P94), A
         POP     AF
         RET
+        
+; Initialize for 40 column mode
+INIT40:
+        LD      A, LNWTH40
+        LD      (LNWIDTH), A
+        LD      HL, MSG024
+        LD      (MSG02AD), HL
+        LD      A, '4'
+        LD      (DISPSZ), A
+        RET
+; Initialize for 80 column mode
+INIT80:
+        LD      A, LNWTH80
+        LD      (LNWIDTH), A
+        LD      HL, MSG028
+        LD      (MSG02AD), HL
+        LD      A, '8'
+        LD      (DISPSZ), A
+        RET
+        
+; Optionally switch to 80 column mode
+ARGPARS:
+        LD      HL, ARGBUF
+        LD      A, (HL)         ; Load arg string size
+        CP      00h             ; check for no args
+        RET     Z
+        INC     HL              ; Space expected here
+        INC     HL
+        LD      A, (HL)         ; load 1st char, first argument
+        CP      '8'
+        CALL    Z, INIT80       ; Re-init when arg is '8'
+        RET
 ;
+;       ********************************************************
+;               Message area
+;       ********************************************************
+
 MSG01:
         DEFB      CR,LF
-        DEFB      'RAM/ROM bank & RAM disk dump program 3', CR,LF
+        DEFB      'RAM/ROM bank & RAM disk dump program '
+DISPSZ:
+        DEFB      '40', CR,LF
+        DEFB      'Version ', MAYORV + '0', '.', MINORV + '0', '.', PATCHV + '0', CR,LF
         DEFB      00H
-MSG02:
-;        DEFB      'Addr 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F  ASCII',CR,LF
-        DEFB      'Addr 00 01 02 03 04 05 06 07  ASCII', CR,LF
+MSG028:
+        DEFB      'Addr 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F  -----ASCII------',CR,LF
+        DEFB      00H
+MSG024:
+        DEFB      'Addr 00 01 02 03 04 05 06 07  --ASCII-', CR,LF
         DEFB      00H
 MSG03:        
         DEFB      CR,LF
@@ -712,7 +769,7 @@ MSG04:
         DEFB      ' 1 - System bank     2 - Bank 0 (RAM)', CR,LF
         DEFB      ' 3 - Bank 1 (RAM/B:) 4 - Bank 2 (RAM/C:)', CR,LF
         DEFB      ' 5 - RAMdisk(A:)low  6 - RAMdisk(A:)high', CR,LF
-        DEFB      ' 7 - ROM low         8 - ROM high', CR,LF
+        DEFB      ' 7 - RD ROM low      8 - RD ROM high', CR,LF
         DEFB      00H
 MSGBD:
         DEFB      CR,LF
@@ -729,12 +786,20 @@ MSGABRT:
         DEFB      'No RAM disk at 90h-93h', CR,LF
         DEFB      00H
 ;        
+;
+;       ********************************************************
+;               Work area
+;       ********************************************************
 INCNT:
         DEFS      1
 INDATA:
         DEFS      2
-ASCDATA:        
-        DEFS      LINEWTH
+LNWIDTH:          ; number of bytes per line, 8 for 40 col., 16 for 80 col.
+        DEFB      LNWTH40
+ASCDATA:          ; Buffer for ASCII characters
+        DEFS      LNWTH80
+MSG02AD:
+        DEFS      MSG024
 ADDR:
         DEFS      2
 BANK:
