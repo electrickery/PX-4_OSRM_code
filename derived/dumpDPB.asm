@@ -1,4 +1,8 @@
+;
+;  6.2.3 System Area II (RSYSAR2), II-613 - 
 
+Disk Parameter Block (at 0F200h, II-629)
+;
 WBOOT   EQU     0EB03H          ; Warm Boot entry
 CONIN           EQU     WBOOT   +06H
 CONOUT          EQU     WBOOT   +09H    ; Console out entry
