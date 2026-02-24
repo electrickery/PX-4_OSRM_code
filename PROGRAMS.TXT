@@ -44,9 +44,12 @@ III43_4.bas  Power ON read time from file program
 III45_1.bas  Power OFF program
 
 derived:
-II-155_LoadxSampleProgram2.asm              Like 155_LoadxSampleProgram but in 80 columns
-memdump.asm                                 Like II-155 but also dumps RAM disk and 1MBit ROM
+II-155_LoadxSampleProgram2.asm              Like 155_LoadxSampleProgram but in 80 columns.
+memdump.asm                                 Like II-155 but also dumps RAM disk and 1MBit ROM.
 dumpDPB.asm                                 Dumps the Disk Parameter Block values in hex, per device.
+romDir.py                                   Epson PX-4 & PX-8 ROM capsule image directory listing program.
+romFileRead.py                              Extracts files from ROM capsule images.
+romInfo.py                                  Epson PX-4 & PX-8 ROM capsule image info program.
 
 Descriptions
 
@@ -55,7 +58,5 @@ II-145_BIOSCallSampleProgram.asm
 The program tests the RS232C port via extended BIOS calls. It has two main control keys:
  - STOP exits the program
  - HELP toggles sending the string '0123456789' over the serial port.
- 
 Other keys are echoed to the console. Received characters are echoed to the console in reverse.
-
 When an communication error occurs, the HL, DE, BC and AF registers are dumped.

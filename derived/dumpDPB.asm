@@ -7,7 +7,7 @@ WBOOT   EQU     0EB03H          ; Warm Boot entry
 CONIN           EQU     WBOOT   +06H
 CONOUT          EQU     WBOOT   +09H    ; Console out entry
 
-DPB0    EQU     0F200h  ; DPB (Disk Parameter Block) for RAM disk
+DPB0    EQU     0F200h  ; DPB (Disk Parameter Block) for RAM disk A:
 DPB1    EQU     0F20Fh  ; DPB (Disk Parameter Block) for ROM capsule 1, B:
 DPB2    EQU     0F21Eh  ; DPB (Disk Parameter Block) for ROM capsule 2, C:
 DPB3    EQU     0F22Dh  ; DPB (Disk Parameter Block) for FDD, D:, E:, F:, G:
@@ -244,16 +244,16 @@ SPACE:
 
 DPB_BASE:       DEFW    0000        
 
-DPB_SPT:        DEFW    26
-DPB_BSFT:       DEFB    3
-DPB_BMASK:      DEFB    7
-DPB_EXMSK:      DEFB    3
-DPB_MABN:       DEFW    242
-DPB_NDIRE:      DEFW    63
-DPB_BAB1:       DEFB    1100$0000B
-DPB_BAB2:       DEFB    0000$0000B
-DPB_NBCB:       DEFW    16
-DPB_NTBD:       DEFW    2
+DPB_SPT:        DEFW    26          ; Sectors per track
+DPB_BSFT:       DEFB    3           ; Block shift
+DPB_BMASK:      DEFB    7           ; Block mask
+DPB_EXMSK:      DEFB    3           ; Extend mask
+DPB_MABN:       DEFW    242         ; Max. allocation block number
+DPB_NDIRE:      DEFW    63          ; Number of directory entries
+DPB_BAB1:       DEFB    1100$0000B  ; Bit map for allocation blocks 1
+DPB_BAB2:       DEFB    0000$0000B  ; Bit map for allocation blocks 2
+DPB_NBCB:       DEFW    16          ; No. of tracks before directory
+DPB_NTBD:       DEFW    2           ; Disk Parameter Block address
 
 MSG_SPT:        DEFB    'h Sectors per track', 0
 MSG_BSFT:       DEFB    'h Block shift', 0
